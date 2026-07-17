@@ -518,7 +518,6 @@ const buildSite = (data) => {
           ? `
               <div class="floating-cta reveal is-visible">
                 <a class="floating-cta-copy" href="${escapeHtml(data.floatingCta.primaryHref)}">
-                  <span class="floating-cta-kicker">Всегда под рукой</span>
                   <strong>${escapeHtml(data.floatingCta.label)}</strong>
                 </a>
                 <div class="floating-cta-actions">

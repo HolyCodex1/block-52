@@ -1299,9 +1299,8 @@ h1 {
 
 .floating-cta-copy {
   position: relative;
-  display: grid;
-  gap: 4px;
-  align-content: center;
+  display: flex;
+  align-items: center;
   min-width: 240px;
   width: clamp(240px, 28vw, 360px);
   flex: 0 1 auto;
@@ -1320,17 +1319,6 @@ h1 {
     border-color 0.24s ease,
     box-shadow 0.24s ease,
     background 0.24s ease;
-}
-
-.floating-cta-kicker {
-  position: relative;
-  z-index: 1;
-  display: block;
-  color: var(--accent);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
 }
 
 .floating-cta-copy strong {
