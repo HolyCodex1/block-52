@@ -1220,7 +1220,7 @@ h1 {
   --spec-angle: 0.72rad;
   --spec-opacity: 0.44;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -1235,7 +1235,7 @@ h1 {
 }
 
 .floating-cta .btn-specular::after {
-  opacity: 0.34;
+  opacity: 0.24;
   background:
     radial-gradient(
       120px circle at var(--mx) var(--my),
@@ -1254,10 +1254,56 @@ h1 {
       rgba(255, 255, 255, 0.03) 72%,
       transparent 88%
     );
+  transform: translateX(-12%) scale(1.02);
 }
 
 .floating-cta .btn-specular {
   isolation: isolate;
+}
+
+.floating-cta .btn-specular > span,
+.floating-cta .btn-specular > strong,
+.floating-cta .btn-specular {
+  position: relative;
+  z-index: 1;
+}
+
+.floating-cta .btn-specular::selection {
+  background: transparent;
+}
+
+.floating-cta .btn-specular::before {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.floating-cta .btn-specular::marker {
+  content: "";
+}
+
+.floating-cta .btn-specular .specular-sweep {
+  display: none;
+}
+
+.floating-cta .btn-specular::after,
+.floating-cta .btn-specular::before {
+  transition:
+    opacity 0.24s ease,
+    transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.24s ease;
+}
+
+.floating-cta .btn-specular::before {
+  background:
+    linear-gradient(
+      118deg,
+      transparent 14%,
+      rgba(255, 255, 255, 0.06) 32%,
+      rgba(255, 255, 255, 0.14) 44%,
+      rgba(255, 255, 255, 0.04) 58%,
+      transparent 74%
+    );
+  background-size: 220% 100%;
+  background-position: 120% 0;
 }
 
 .floating-cta .btn-specular:hover,
@@ -1273,11 +1319,25 @@ h1 {
 .floating-cta .btn-specular:hover::after,
 .floating-cta .btn-specular:focus-visible::after,
 .floating-cta .btn-specular.is-specular::after {
-  opacity: var(--spec-opacity);
+  opacity: max(0.72, var(--spec-opacity));
+  transform: translateX(0) scale(1.04);
 }
 
-.floating-cta .btn-specular::selection {
-  background: transparent;
+.floating-cta .btn-specular:hover::before,
+.floating-cta .btn-specular:focus-visible::before,
+.floating-cta .btn-specular.is-specular::before {
+  background-position: -20% 0;
+  animation: specularSweep 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) 1;
+}
+
+@keyframes specularSweep {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -20% 0;
+  }
 }
 
 .reveal {
