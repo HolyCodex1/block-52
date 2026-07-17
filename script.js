@@ -380,6 +380,57 @@ const buildSite = (data) => {
             : ""
         }
 
+        ${
+          hasItems(data.visitFlow?.items)
+            ? `
+                <section class="section reveal" id="visit-flow">
+                  <div class="section-heading">
+                    <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.visitFlow.eyebrow)}</p>
+                    <h2 class="reveal reveal-delay-2">${escapeHtml(data.visitFlow.title)}</h2>
+                  </div>
+
+                  <div class="flow-grid">
+                    ${renderList(
+                      data.visitFlow.items,
+                      (item, index) => `
+                        <article class="flow-card reveal reveal-delay-${Math.min(index + 1, 5)}">
+                          <span class="flow-step">${escapeHtml(item.step)}</span>
+                          <h3>${escapeHtml(item.title)}</h3>
+                          <p>${escapeHtml(item.text)}</p>
+                        </article>
+                      `
+                    )}
+                  </div>
+                </section>
+              `
+            : ""
+        }
+
+        ${
+          hasItems(data.reviewHighlights?.items)
+            ? `
+                <section class="section reveal" id="review-highlights">
+                  <div class="section-heading">
+                    <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.reviewHighlights.eyebrow)}</p>
+                    <h2 class="reveal reveal-delay-2">${escapeHtml(data.reviewHighlights.title)}</h2>
+                  </div>
+
+                  <div class="highlight-grid">
+                    ${renderList(
+                      data.reviewHighlights.items,
+                      (item, index) => `
+                        <article class="highlight-card reveal reveal-delay-${Math.min(index + 1, 5)}">
+                          <h3>${escapeHtml(item.title)}</h3>
+                          <p>${escapeHtml(item.text)}</p>
+                        </article>
+                      `
+                    )}
+                  </div>
+                </section>
+              `
+            : ""
+        }
+
         <section class="section reveal" id="reviews">
           <div class="section-heading">
             <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.reviews.eyebrow)}</p>
@@ -401,6 +452,33 @@ const buildSite = (data) => {
             )}
           </div>
         </section>
+
+        ${
+          hasItems(data.faq?.items)
+            ? `
+                <section class="section reveal" id="faq">
+                  <div class="section-heading">
+                    <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.faq.eyebrow)}</p>
+                    <h2 class="reveal reveal-delay-2">${escapeHtml(data.faq.title)}</h2>
+                  </div>
+
+                  <div class="faq-list">
+                    ${renderList(
+                      data.faq.items,
+                      (item, index) => `
+                        <details class="faq-item reveal reveal-delay-${Math.min(index + 1, 5)}">
+                          <summary>
+                            <span>${escapeHtml(item.question)}</span>
+                          </summary>
+                          <p>${escapeHtml(item.answer)}</p>
+                        </details>
+                      `
+                    )}
+                  </div>
+                </section>
+              `
+            : ""
+        }
 
         <section class="section reveal" id="contact">
           <div class="contact-panel">
@@ -431,6 +509,26 @@ const buildSite = (data) => {
       <footer class="footer">
         <p>© <span id="year"></span> ${escapeHtml(data.footer)}</p>
       </footer>
+
+      ${
+        data.floatingCta
+          ? `
+              <div class="floating-cta reveal is-visible">
+                <div class="floating-cta-copy">
+                  <span>${escapeHtml(data.floatingCta.label)}</span>
+                </div>
+                <div class="floating-cta-actions">
+                  <a class="btn primary" href="${escapeHtml(data.floatingCta.primaryHref)}">
+                    ${escapeHtml(data.floatingCta.primaryLabel)}
+                  </a>
+                  <a class="btn secondary" href="${escapeHtml(data.floatingCta.secondaryHref)}" target="_blank" rel="noreferrer">
+                    ${escapeHtml(data.floatingCta.secondaryLabel)}
+                  </a>
+                </div>
+              </div>
+            `
+          : ""
+      }
     </div>
   `;
 };
