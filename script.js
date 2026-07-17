@@ -518,7 +518,7 @@ const buildSite = (data) => {
                   <span>${escapeHtml(data.floatingCta.label)}</span>
                 </div>
                 <div class="floating-cta-actions">
-                  <a class="btn primary" href="${escapeHtml(data.floatingCta.primaryHref)}">
+                  <a class="btn primary btn-specular" href="${escapeHtml(data.floatingCta.primaryHref)}">
                     ${escapeHtml(data.floatingCta.primaryLabel)}
                   </a>
                   <a class="btn secondary" href="${escapeHtml(data.floatingCta.secondaryHref)}" target="_blank" rel="noreferrer">
@@ -604,6 +604,18 @@ const setupButtonShine = () => {
 
       button.style.setProperty("--mx", `${x}px`);
       button.style.setProperty("--my", `${y}px`);
+
+      if (button.classList.contains("btn-specular")) {
+        const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2);
+        button.style.setProperty("--spec-angle", `${angle}rad`);
+
+        const distanceX = Math.abs(event.clientX - (rect.left + rect.width / 2));
+        const distanceY = Math.abs(event.clientY - (rect.top + rect.height / 2));
+        const distance = Math.hypot(distanceX, distanceY);
+        const proximity = Math.max(0, 1 - distance / 220);
+        button.style.setProperty("--spec-opacity", `${0.38 + proximity * 0.62}`);
+      }
+
       button.classList.add("is-specular");
     };
 
@@ -611,6 +623,9 @@ const setupButtonShine = () => {
     button.addEventListener("pointerenter", setPointer);
     button.addEventListener("pointerleave", () => {
       button.classList.remove("is-specular");
+      if (button.classList.contains("btn-specular")) {
+        button.style.removeProperty("--spec-opacity");
+      }
     });
   });
 };
