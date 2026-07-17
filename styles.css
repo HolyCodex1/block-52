@@ -1197,13 +1197,120 @@ h1 {
 }
 
 .floating-cta-copy {
+  --spec-angle: 0.72rad;
+  --spec-opacity: 0.48;
+  position: relative;
+  display: flex;
+  align-items: center;
   min-width: 0;
+  flex: 1 1 auto;
+  min-height: 60px;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+  text-decoration: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.018);
+  transition:
+    transform 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease,
+    background 0.24s ease;
+}
+
+.floating-cta-copy::before,
+.floating-cta-copy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.floating-cta-copy::before {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(
+      118deg,
+      transparent 14%,
+      rgba(255, 255, 255, 0.05) 32%,
+      rgba(255, 255, 255, 0.14) 46%,
+      rgba(255, 255, 255, 0.04) 58%,
+      transparent 74%
+    );
+  background-size: 220% 100%;
+  background-position: 120% 0;
+  transition:
+    background-position 0.95s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.24s ease,
+    opacity 0.24s ease;
+}
+
+.floating-cta-copy::after {
+  opacity: 0.22;
+  background:
+    radial-gradient(
+      140px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 255, 255, 0.26) 0%,
+      rgba(255, 255, 255, 0.1) 24%,
+      rgba(255, 255, 255, 0.03) 44%,
+      transparent 74%
+    ),
+    linear-gradient(
+      var(--spec-angle),
+      transparent 12%,
+      rgba(255, 255, 255, 0.03) 30%,
+      rgba(255, 255, 255, 0.18) 46%,
+      rgba(255, 255, 255, 0.34) 50%,
+      rgba(255, 255, 255, 0.14) 56%,
+      rgba(255, 255, 255, 0.02) 72%,
+      transparent 88%
+    );
+  transform: translateX(-12%) scale(1.02);
+  transition:
+    opacity 0.24s ease,
+    transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .floating-cta-copy span {
+  position: relative;
+  z-index: 1;
   display: block;
   color: var(--text);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
   font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.floating-cta-copy:hover,
+.floating-cta-copy:focus-visible,
+.floating-cta-copy.is-specular {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 28%, rgba(255, 255, 255, 0.08));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.026)),
+    rgba(255, 255, 255, 0.028);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 40px rgba(0, 0, 0, 0.24),
+    0 0 26px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.floating-cta-copy:hover::before,
+.floating-cta-copy:focus-visible::before,
+.floating-cta-copy.is-specular::before {
+  background-position: -20% 0;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.floating-cta-copy:hover::after,
+.floating-cta-copy:focus-visible::after,
+.floating-cta-copy.is-specular::after {
+  opacity: max(0.76, var(--spec-opacity));
+  transform: translateX(0) scale(1.04);
 }
 
 .floating-cta-actions {
@@ -1487,6 +1594,10 @@ h1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     margin-left: 0;
+  }
+
+  .floating-cta-copy {
+    min-height: 56px;
   }
 
   .cursor-glow {

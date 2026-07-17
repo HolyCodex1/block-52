@@ -514,9 +514,9 @@ const buildSite = (data) => {
         data.floatingCta
           ? `
               <div class="floating-cta reveal is-visible">
-                <div class="floating-cta-copy">
+                <a class="floating-cta-copy btn-specular-panel" href="${escapeHtml(data.floatingCta.primaryHref)}">
                   <span>${escapeHtml(data.floatingCta.label)}</span>
-                </div>
+                </a>
                 <div class="floating-cta-actions">
                   <a class="btn primary btn-specular" href="${escapeHtml(data.floatingCta.primaryHref)}">
                     ${escapeHtml(data.floatingCta.primaryLabel)}
@@ -594,7 +594,7 @@ const setupReveal = () => {
 };
 
 const setupButtonShine = () => {
-  const buttons = document.querySelectorAll(".btn");
+  const buttons = document.querySelectorAll(".btn, .btn-specular-panel");
 
   buttons.forEach((button) => {
     const setPointer = (event) => {
@@ -605,7 +605,10 @@ const setupButtonShine = () => {
       button.style.setProperty("--mx", `${x}px`);
       button.style.setProperty("--my", `${y}px`);
 
-      if (button.classList.contains("btn-specular")) {
+      if (
+        button.classList.contains("btn-specular") ||
+        button.classList.contains("btn-specular-panel")
+      ) {
         const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2);
         button.style.setProperty("--spec-angle", `${angle}rad`);
 
@@ -623,7 +626,10 @@ const setupButtonShine = () => {
     button.addEventListener("pointerenter", setPointer);
     button.addEventListener("pointerleave", () => {
       button.classList.remove("is-specular");
-      if (button.classList.contains("btn-specular")) {
+      if (
+        button.classList.contains("btn-specular") ||
+        button.classList.contains("btn-specular-panel")
+      ) {
         button.style.removeProperty("--spec-opacity");
       }
     });
