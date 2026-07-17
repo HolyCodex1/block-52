@@ -1200,8 +1200,9 @@ h1 {
   position: relative;
   display: flex;
   align-items: center;
-  min-width: 0;
-  flex: 1 1 auto;
+  min-width: 220px;
+  width: clamp(220px, 26vw, 340px);
+  flex: 0 1 auto;
   min-height: 60px;
   padding: 0 22px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1541,6 +1542,7 @@ h1 {
   }
 
   .floating-cta-copy {
+    width: 100%;
     min-height: 56px;
   }
 
