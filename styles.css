@@ -1269,14 +1269,15 @@ h1 {
 
 .floating-cta {
   position: fixed;
-  left: 50%;
+  right: 16px;
+  left: auto;
   bottom: 20px;
   z-index: 30;
   display: grid;
-  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
-  align-items: center;
+  grid-template-columns: 1fr;
+  align-items: stretch;
   gap: 10px;
-  width: min(720px, calc(100vw - 32px));
+  width: min(420px, calc(100vw - 32px));
   max-width: calc(100vw - 32px);
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1287,7 +1288,7 @@ h1 {
     rgba(13, 10, 9, 0.82);
   backdrop-filter: blur(22px);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
-  transform: translateX(-50%);
+  transform: none;
 }
 
 .floating-cta-copy {
@@ -1535,5 +1536,11 @@ h1 {
   .floating-cta-copy,
   .floating-cta .btn {
     min-height: 50px;
+  }
+}
+
+@media (max-width: 380px) {
+  .floating-cta-actions {
+    grid-template-columns: 1fr;
   }
 }
