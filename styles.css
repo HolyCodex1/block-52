@@ -1483,22 +1483,31 @@ h1 {
   }
 
   .floating-cta {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
     align-items: stretch;
     flex-direction: column;
     gap: 12px;
     bottom: 14px;
     padding: 14px;
+    transform: none;
   }
 
   .floating-cta-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     margin-left: 0;
   }
 
   .floating-cta-copy {
     width: 100%;
     min-height: 56px;
+  }
+
+  .floating-cta .btn {
+    min-width: 0;
   }
 
   .cursor-glow {
