@@ -330,6 +330,11 @@ a {
   padding: clamp(28px, 4vw, 56px);
 }
 
+.hero-card {
+  padding: 24px;
+  overflow: hidden;
+}
+
 .eyebrow {
   position: relative;
   display: inline-flex;
@@ -532,17 +537,69 @@ h1 {
   box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
-.hero-card {
-  padding: 28px;
-  overflow: hidden;
-}
-
 .hero-badge,
 .hero-rating,
 .schedule-card,
 .quote-card {
   position: relative;
   z-index: 1;
+}
+
+.hero-visual,
+.about-visual,
+.gallery-media,
+.team-feature-visual {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hero-visual {
+  margin-bottom: 20px;
+  aspect-ratio: 4 / 3;
+}
+
+.hero-visual::after,
+.about-visual::after,
+.gallery-media::after,
+.team-feature-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 15%, rgba(7, 4, 4, 0.14) 100%),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 18%, transparent), transparent 30%);
+  pointer-events: none;
+}
+
+.hero-visual img,
+.about-visual img,
+.gallery-media img,
+.team-feature-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.01);
+}
+
+.hero-visual figcaption,
+.about-visual figcaption {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(10, 8, 8, 0.54);
+  backdrop-filter: blur(14px);
+  color: var(--text);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .hero-badge {
@@ -688,6 +745,12 @@ h1 {
   margin-bottom: 28px;
 }
 
+.section-lead {
+  max-width: 64ch;
+  margin-top: 14px;
+  color: var(--muted);
+}
+
 .section-heading h2 {
   max-width: 16ch;
   font-size: clamp(2.1rem, 4vw, 3.6rem);
@@ -701,7 +764,17 @@ h1 {
   align-items: start;
 }
 
+.about-side {
+  display: grid;
+  gap: 18px;
+}
+
+.about-visual {
+  aspect-ratio: 4 / 5;
+}
+
 .intro-text,
+.about-side,
 .facts-grid,
 .services-grid,
 .review-grid,
@@ -722,6 +795,75 @@ h1 {
 .team-grid,
 .offer-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.gallery-card,
+.team-feature {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.02);
+  box-shadow: var(--shadow);
+}
+
+.gallery-card {
+  grid-column: span 4;
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.gallery-card-large {
+  grid-column: span 8;
+}
+
+.gallery-card:hover,
+.gallery-card:focus-within,
+.team-feature:hover,
+.team-feature:focus-within {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent) 34%, rgba(255, 255, 255, 0.08));
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent),
+    0 0 32px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.gallery-media {
+  border: none;
+  border-radius: 26px 26px 0 0;
+  aspect-ratio: 4 / 3;
+}
+
+.gallery-card-large .gallery-media {
+  aspect-ratio: 16 / 10;
+}
+
+.gallery-copy,
+.team-feature-copy {
+  padding: 18px 20px 20px;
+}
+
+.gallery-copy h3 {
+  margin-bottom: 10px;
+  font-size: 1.08rem;
+}
+
+.gallery-copy p,
+.team-feature-copy p {
+  color: var(--muted);
 }
 
 .fact-number {
@@ -767,6 +909,25 @@ h1 {
 .team-top span {
   color: var(--muted);
   margin-bottom: 10px;
+}
+
+.team-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.team-feature {
+  align-self: stretch;
+}
+
+.team-feature-visual {
+  border: none;
+  border-radius: 26px 26px 0 0;
+  aspect-ratio: 4 / 5;
 }
 
 .review-meta {
@@ -844,6 +1005,7 @@ h1 {
   .hero-grid,
   .intro-layout,
   .contact-panel,
+  .team-layout,
   .facts-grid,
   .services-grid,
   .review-grid,
@@ -851,6 +1013,15 @@ h1 {
   .team-grid,
   .offer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-card,
+  .gallery-card-large {
+    grid-column: auto;
   }
 
   h1,

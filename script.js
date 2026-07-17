@@ -15,6 +15,28 @@ const escapeHtml = (value) =>
 
 const renderList = (items, renderItem) => items.map(renderItem).join("");
 const hasItems = (items) => Array.isArray(items) && items.length > 0;
+const renderImage = (image, className, sizes = "100vw", loading = "lazy") =>
+  image?.src
+    ? `
+        <figure class="${className}">
+          <img
+            src="${escapeHtml(image.src)}"
+            alt="${escapeHtml(image.alt || "")}"
+            loading="${loading}"
+            sizes="${escapeHtml(sizes)}"
+          />
+          ${
+            image.eyebrow || image.caption
+              ? `
+                  <figcaption>
+                    ${escapeHtml(image.eyebrow || image.caption)}
+                  </figcaption>
+                `
+              : ""
+          }
+        </figure>
+      `
+    : "";
 
 const applyTheme = (theme = {}) => {
   const root = document.documentElement;
@@ -104,6 +126,7 @@ const buildSite = (data) => {
           </div>
 
           <div class="hero-card">
+            ${renderImage(data.heroCard.image, "hero-visual reveal reveal-delay-1", "(max-width: 980px) 100vw, 32vw", "eager")}
             <div class="hero-badge reveal reveal-delay-2">${escapeHtml(data.heroCard.badge)}</div>
             <div class="hero-rating reveal reveal-delay-3">
               <strong>${escapeHtml(data.heroCard.rating)}</strong>
@@ -136,7 +159,10 @@ const buildSite = (data) => {
               ${renderList(data.about.paragraphs, (item) => `<p>${escapeHtml(item)}</p>`)}
             </div>
 
-            <div class="facts-grid">
+            <div class="about-side">
+              ${renderImage(data.about.image, "about-visual reveal reveal-delay-3", "(max-width: 980px) 100vw, 40vw")}
+
+              <div class="facts-grid">
               ${renderList(
                 data.about.facts,
                 (item) => `
@@ -146,9 +172,46 @@ const buildSite = (data) => {
                   </article>
                 `
               )}
+              </div>
             </div>
           </div>
         </section>
+
+        ${
+          hasItems(data.gallery?.items)
+            ? `
+                <section class="section reveal" id="gallery">
+                  <div class="section-heading">
+                    <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.gallery.eyebrow)}</p>
+                    <h2 class="reveal reveal-delay-2">${escapeHtml(data.gallery.title)}</h2>
+                    <p class="section-lead reveal reveal-delay-3">${escapeHtml(data.gallery.text || "")}</p>
+                  </div>
+
+                  <div class="gallery-grid">
+                    ${renderList(
+                      data.gallery.items,
+                      (item, index) => `
+                        <article class="gallery-card ${item.size === "large" ? "gallery-card-large" : ""} reveal reveal-delay-${Math.min(index + 1, 5)}">
+                          <figure class="gallery-media">
+                            <img
+                              src="${escapeHtml(item.src)}"
+                              alt="${escapeHtml(item.alt || item.title || "")}"
+                              loading="lazy"
+                              sizes="${escapeHtml(item.size === "large" ? "(max-width: 980px) 100vw, 52vw" : "(max-width: 980px) 100vw, 24vw")}"
+                            />
+                          </figure>
+                          <div class="gallery-copy">
+                            <h3>${escapeHtml(item.title)}</h3>
+                            <p>${escapeHtml(item.text)}</p>
+                          </div>
+                        </article>
+                      `
+                    )}
+                  </div>
+                </section>
+              `
+            : ""
+        }
 
         <section class="section reveal" id="services">
           <div class="section-heading">
@@ -207,7 +270,22 @@ const buildSite = (data) => {
                     <h2 class="reveal reveal-delay-2">${escapeHtml(data.team.title)}</h2>
                   </div>
 
-                  <div class="team-grid">
+                  <div class="team-layout">
+                    ${
+                      data.team.feature
+                        ? `
+                            <article class="team-feature reveal reveal-delay-3">
+                              ${renderImage(data.team.feature, "team-feature-visual", "(max-width: 980px) 100vw, 36vw")}
+                              <div class="team-feature-copy">
+                                <p class="card-label">${escapeHtml(data.team.feature.label || "Команда")}</p>
+                                <p>${escapeHtml(data.team.feature.text || "")}</p>
+                              </div>
+                            </article>
+                          `
+                        : ""
+                    }
+
+                    <div class="team-grid">
                     ${renderList(
                       data.team.members,
                       (item) => `
@@ -221,6 +299,7 @@ const buildSite = (data) => {
                         </article>
                       `
                     )}
+                    </div>
                   </div>
                 </section>
               `
