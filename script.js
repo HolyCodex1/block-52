@@ -515,7 +515,6 @@ const buildSite = (data) => {
           ? `
               <div class="floating-cta reveal is-visible">
                 <a class="floating-cta-copy btn-specular-panel" href="${escapeHtml(data.floatingCta.primaryHref)}">
-                  <span class="specular-panel-fx" aria-hidden="true"></span>
                   <span>${escapeHtml(data.floatingCta.label)}</span>
                 </a>
                 <div class="floating-cta-actions">
@@ -595,7 +594,7 @@ const setupReveal = () => {
 };
 
 const setupButtonShine = () => {
-  const buttons = document.querySelectorAll(".btn, .btn-specular-panel");
+  const buttons = document.querySelectorAll(".btn");
 
   buttons.forEach((button) => {
     const setPointer = (event) => {
@@ -606,10 +605,7 @@ const setupButtonShine = () => {
       button.style.setProperty("--mx", `${x}px`);
       button.style.setProperty("--my", `${y}px`);
 
-      if (
-        button.classList.contains("btn-specular") ||
-        button.classList.contains("btn-specular-panel")
-      ) {
+      if (button.classList.contains("btn-specular")) {
         const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2);
         button.style.setProperty("--spec-angle", `${angle}rad`);
 
@@ -625,175 +621,12 @@ const setupButtonShine = () => {
 
     button.addEventListener("pointermove", setPointer);
     button.addEventListener("pointerenter", setPointer);
-    button.addEventListener("pointerleave", () => {
+      button.addEventListener("pointerleave", () => {
       button.classList.remove("is-specular");
-      if (
-        button.classList.contains("btn-specular") ||
-        button.classList.contains("btn-specular-panel")
-      ) {
+      if (button.classList.contains("btn-specular")) {
         button.style.removeProperty("--spec-opacity");
       }
     });
-  });
-};
-
-const setupSpecularPanels = () => {
-  const panels = document.querySelectorAll(".btn-specular-panel");
-
-  panels.forEach((panel) => {
-    const fx = panel.querySelector(".specular-panel-fx");
-
-    if (!fx) {
-      return;
-    }
-
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-
-    if (!context) {
-      return;
-    }
-
-    fx.appendChild(canvas);
-
-    const state = {
-      width: 0,
-      height: 0,
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
-      angle: 2.4,
-      pointerAngle: null,
-      proximity: 0,
-      intensity: 0,
-      idleAngle: 2.4,
-      rafId: null,
-      lastTime: performance.now(),
-    };
-
-    const resize = () => {
-      const rect = panel.getBoundingClientRect();
-      state.width = rect.width;
-      state.height = rect.height;
-      canvas.width = Math.max(1, Math.round(rect.width * state.dpr));
-      canvas.height = Math.max(1, Math.round(rect.height * state.dpr));
-      canvas.style.width = `${rect.width}px`;
-      canvas.style.height = `${rect.height}px`;
-    };
-
-    const drawRoundedRect = (ctx, x, y, width, height, radius) => {
-      const r = Math.min(radius, width / 2, height / 2);
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.arcTo(x + width, y, x + width, y + height, r);
-      ctx.arcTo(x + width, y + height, x, y + height, r);
-      ctx.arcTo(x, y + height, x, y, r);
-      ctx.arcTo(x, y, x + width, y, r);
-      ctx.closePath();
-    };
-
-    const render = (now) => {
-      const dt = Math.min((now - state.lastTime) / 1000, 0.05);
-      state.lastTime = now;
-      state.idleAngle += 0.35 * dt;
-
-      const targetAngle = state.pointerAngle ?? state.idleAngle;
-      const diff = ((targetAngle - state.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-      state.angle += diff * (1 - Math.exp(-dt * 7));
-      state.intensity += (state.proximity - state.intensity) * (1 - Math.exp(-dt * 8));
-
-      const ctx = context;
-      const dpr = state.dpr;
-      const width = state.width;
-      const height = state.height;
-
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.scale(dpr, dpr);
-
-      const lineWidth = 1.25;
-      const radius = 18;
-      const inset = 1.5;
-      const gradRadius = Math.max(width, height) * 0.9;
-      const cx = width / 2;
-      const cy = height / 2;
-      const lightX = cx + Math.cos(state.angle) * gradRadius;
-      const lightY = cy + Math.sin(state.angle) * gradRadius;
-
-      const baseAlpha = 0.16 + state.intensity * 0.18;
-      const hiAlpha = state.intensity * 0.95;
-
-      drawRoundedRect(ctx, inset, inset, width - inset * 2, height - inset * 2, radius);
-      ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = `rgba(120, 102, 88, ${baseAlpha})`;
-      ctx.stroke();
-
-      const edgeGradient = ctx.createLinearGradient(
-        cx - Math.cos(state.angle) * gradRadius,
-        cy - Math.sin(state.angle) * gradRadius,
-        lightX,
-        lightY
-      );
-      edgeGradient.addColorStop(0, "rgba(255,255,255,0)");
-      edgeGradient.addColorStop(0.34, `rgba(255,255,255,${hiAlpha * 0.18})`);
-      edgeGradient.addColorStop(0.5, `rgba(255,255,255,${hiAlpha})`);
-      edgeGradient.addColorStop(0.66, `rgba(255,255,255,${hiAlpha * 0.18})`);
-      edgeGradient.addColorStop(1, "rgba(255,255,255,0)");
-
-      drawRoundedRect(ctx, inset, inset, width - inset * 2, height - inset * 2, radius);
-      ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = edgeGradient;
-      ctx.shadowColor = `rgba(255,255,255,${hiAlpha * 0.45})`;
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      if (state.intensity > 0.02) {
-        const fillGlow = ctx.createRadialGradient(cx, cy, 0, lightX, lightY, gradRadius);
-        fillGlow.addColorStop(0, `rgba(255,255,255,${state.intensity * 0.02})`);
-        fillGlow.addColorStop(0.5, `rgba(255,255,255,${state.intensity * 0.045})`);
-        fillGlow.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.save();
-        drawRoundedRect(ctx, inset + 1, inset + 1, width - (inset + 1) * 2, height - (inset + 1) * 2, radius - 1);
-        ctx.clip();
-        ctx.fillStyle = fillGlow;
-        ctx.fillRect(0, 0, width, height);
-        ctx.restore();
-      }
-
-      state.rafId = window.requestAnimationFrame(render);
-    };
-
-    const updatePointer = (event) => {
-      const rect = panel.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = Math.max(rect.left - event.clientX, 0, event.clientX - rect.right);
-      const dy = Math.max(rect.top - event.clientY, 0, event.clientY - rect.bottom);
-      const dist = Math.hypot(dx, dy);
-
-      if (dist === 0) {
-        const nx = (event.clientX - cx) / (rect.width / 2);
-        const ny = (cy - event.clientY) / (rect.height / 2);
-        state.pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
-      } else {
-        state.pointerAngle = Math.atan2(cy - event.clientY, event.clientX - cx);
-      }
-
-      const t = Math.max(0, 1 - dist / 250);
-      state.proximity = t * t * (3 - 2 * t);
-    };
-
-    const onPointerLeave = () => {
-      state.pointerAngle = null;
-      state.proximity = 0;
-    };
-
-    const observer = new ResizeObserver(resize);
-    observer.observe(panel);
-    resize();
-
-    window.addEventListener("pointermove", updatePointer);
-    panel.addEventListener("pointerleave", onPointerLeave);
-    state.rafId = window.requestAnimationFrame(render);
   });
 };
 
@@ -917,7 +750,6 @@ buildSite(siteData);
 setupMenu();
 setupReveal();
 setupButtonShine();
-setupSpecularPanels();
 setupLogoFocus();
 setupCursorGlow();
 
