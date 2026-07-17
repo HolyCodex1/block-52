@@ -906,17 +906,7 @@ h1 {
 }
 
 .service-glow-card::after {
-  z-index: 0;
-  background:
-    var(--gradient-one) padding-box,
-    var(--gradient-two) padding-box,
-    var(--gradient-three) padding-box;
-  opacity: calc(var(--fill-opacity) * (var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
-  mask-image:
-    radial-gradient(ellipse at 50% 50%, black 38%, transparent 68%),
-    conic-gradient(from var(--cursor-angle) at center, transparent 8%, black 18%, black 82%, transparent 92%);
-  mask-composite: subtract, add;
-  mix-blend-mode: soft-light;
+  display: none;
 }
 
 .service-glow-card > .edge-light {
