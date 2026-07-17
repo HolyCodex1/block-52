@@ -38,6 +38,20 @@ const renderImage = (image, className, sizes = "100vw", loading = "lazy") =>
       `
     : "";
 
+const renderSimpleImage = (image, className, sizes = "100vw") =>
+  image?.src
+    ? `
+        <figure class="${className}">
+          <img
+            src="${escapeHtml(image.src)}"
+            alt="${escapeHtml(image.alt || "")}"
+            loading="lazy"
+            sizes="${escapeHtml(sizes)}"
+          />
+        </figure>
+      `
+    : "";
+
 const applyTheme = (theme = {}) => {
   const root = document.documentElement;
   const themeEntries = {
@@ -290,6 +304,7 @@ const buildSite = (data) => {
                       data.team.members,
                       (item) => `
                         <article class="team-card">
+                          ${renderSimpleImage(item.image, "team-member-photo", "(max-width: 980px) 100vw, 18vw")}
                           <div class="team-top">
                             <strong>${escapeHtml(item.name)}</strong>
                             <span>${escapeHtml(item.role)}</span>
@@ -472,6 +487,57 @@ const setupButtonShine = () => {
   });
 };
 
+const setupCursorGlow = () => {
+  if (window.matchMedia("(pointer: coarse)").matches) {
+    return;
+  }
+
+  const glow = document.createElement("div");
+  glow.className = "cursor-glow";
+  document.body.appendChild(glow);
+
+  let currentX = window.innerWidth / 2;
+  let currentY = window.innerHeight / 2;
+  let targetX = currentX;
+  let targetY = currentY;
+  let rafId = null;
+
+  const render = () => {
+    currentX += (targetX - currentX) * 0.12;
+    currentY += (targetY - currentY) * 0.12;
+
+    glow.style.transform = `translate(${currentX}px, ${currentY}px)`;
+
+    if (Math.abs(targetX - currentX) > 0.2 || Math.abs(targetY - currentY) > 0.2) {
+      rafId = window.requestAnimationFrame(render);
+    } else {
+      rafId = null;
+    }
+  };
+
+  window.addEventListener("pointermove", (event) => {
+    targetX = event.clientX;
+    targetY = event.clientY;
+    glow.classList.add("is-visible");
+
+    if (!rafId) {
+      rafId = window.requestAnimationFrame(render);
+    }
+  });
+
+  window.addEventListener("pointerdown", () => {
+    glow.classList.add("is-active");
+  });
+
+  window.addEventListener("pointerup", () => {
+    glow.classList.remove("is-active");
+  });
+
+  window.addEventListener("pointerleave", () => {
+    glow.classList.remove("is-visible");
+  });
+};
+
 const setupLogoFocus = () => {
   const logos = document.querySelectorAll(".focus-logo");
 
@@ -542,6 +608,7 @@ setupMenu();
 setupReveal();
 setupButtonShine();
 setupLogoFocus();
+setupCursorGlow();
 
 const year = document.getElementById("year");
 if (year) {
