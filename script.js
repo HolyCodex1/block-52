@@ -350,6 +350,36 @@ const buildSite = (data) => {
             : ""
         }
 
+        ${
+          hasItems(data.info?.groups)
+            ? `
+                <section class="section reveal" id="info">
+                  <div class="section-heading">
+                    <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.info.eyebrow)}</p>
+                    <h2 class="reveal reveal-delay-2">${escapeHtml(data.info.title)}</h2>
+                  </div>
+
+                  <div class="info-grid">
+                    ${renderList(
+                      data.info.groups,
+                      (group, index) => `
+                        <article class="info-card reveal reveal-delay-${Math.min(index + 1, 5)}">
+                          <h3>${escapeHtml(group.title)}</h3>
+                          <ul class="info-list">
+                            ${renderList(
+                              group.items,
+                              (item) => `<li>${escapeHtml(item)}</li>`
+                            )}
+                          </ul>
+                        </article>
+                      `
+                    )}
+                  </div>
+                </section>
+              `
+            : ""
+        }
+
         <section class="section reveal" id="reviews">
           <div class="section-heading">
             <p class="eyebrow reveal reveal-delay-1">${escapeHtml(data.reviews.eyebrow)}</p>
