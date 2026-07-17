@@ -237,9 +237,12 @@ const buildSite = (data) => {
             ${renderList(
               data.services.items,
               (item, index) => `
-                <article class="service-card ${index === data.services.accentIndex ? "accent-card" : ""}">
-                  <h3>${escapeHtml(item.title)}</h3>
-                  <p>${escapeHtml(item.text)}</p>
+                <article class="service-card service-glow-card ${index === data.services.accentIndex ? "accent-card" : ""}">
+                  <span class="edge-light" aria-hidden="true"></span>
+                  <div class="service-card-inner">
+                    <h3>${escapeHtml(item.title)}</h3>
+                    <p>${escapeHtml(item.text)}</p>
+                  </div>
                 </article>
               `
             )}
@@ -617,6 +620,65 @@ const setupButtonShine = () => {
   });
 };
 
+const setupBorderGlowCards = () => {
+  const cards = document.querySelectorAll(".service-glow-card");
+
+  const getEdgeProximity = (width, height, x, y) => {
+    const cx = width / 2;
+    const cy = height / 2;
+    const dx = x - cx;
+    const dy = y - cy;
+    let kx = Infinity;
+    let ky = Infinity;
+
+    if (dx !== 0) {
+      kx = cx / Math.abs(dx);
+    }
+
+    if (dy !== 0) {
+      ky = cy / Math.abs(dy);
+    }
+
+    return Math.min(Math.max(1 / Math.min(kx, ky), 0), 1);
+  };
+
+  const getCursorAngle = (width, height, x, y) => {
+    const cx = width / 2;
+    const cy = height / 2;
+    const dx = x - cx;
+    const dy = y - cy;
+
+    if (dx === 0 && dy === 0) {
+      return 45;
+    }
+
+    let degrees = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+
+    if (degrees < 0) {
+      degrees += 360;
+    }
+
+    return degrees;
+  };
+
+  cards.forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const edge = getEdgeProximity(rect.width, rect.height, x, y);
+      const angle = getCursorAngle(rect.width, rect.height, x, y);
+
+      card.style.setProperty("--edge-proximity", `${(edge * 100).toFixed(3)}`);
+      card.style.setProperty("--cursor-angle", `${angle.toFixed(3)}deg`);
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--edge-proximity", "0");
+    });
+  });
+};
+
 const setupCursorGlow = () => {
   if (window.matchMedia("(pointer: coarse)").matches) {
     return;
@@ -737,6 +799,7 @@ buildSite(siteData);
 setupMenu();
 setupReveal();
 setupButtonShine();
+setupBorderGlowCards();
 setupLogoFocus();
 setupCursorGlow();
 

@@ -851,6 +851,107 @@ h1 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.service-glow-card {
+  --edge-proximity: 0;
+  --cursor-angle: 45deg;
+  --edge-sensitivity: 26;
+  --color-sensitivity: calc(var(--edge-sensitivity) + 18);
+  --fill-opacity: 0.28;
+  --glow-color: hsl(33deg 84% 71% / 100%);
+  --glow-color-60: hsl(33deg 84% 71% / 60%);
+  --glow-color-40: hsl(33deg 84% 71% / 40%);
+  --glow-color-20: hsl(33deg 84% 71% / 20%);
+  --gradient-one: radial-gradient(at 80% 55%, rgba(240, 157, 81, 0.7) 0px, transparent 52%);
+  --gradient-two: radial-gradient(at 20% 18%, rgba(255, 214, 153, 0.55) 0px, transparent 50%);
+  --gradient-three: radial-gradient(at 62% 16%, rgba(156, 79, 31, 0.42) 0px, transparent 54%);
+  overflow: visible;
+}
+
+.service-glow-card::before,
+.service-glow-card::after,
+.service-glow-card > .edge-light {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition: opacity 0.25s ease-out;
+  pointer-events: none;
+}
+
+.service-glow-card:not(:hover)::before,
+.service-glow-card:not(:hover)::after,
+.service-glow-card:not(:hover) > .edge-light {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.service-glow-card::before {
+  z-index: 0;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(24, 18, 16, 0.96) 0 100%) padding-box,
+    linear-gradient(rgba(255, 255, 255, 0) 0 100%) border-box,
+    var(--gradient-one) border-box,
+    var(--gradient-two) border-box,
+    var(--gradient-three) border-box;
+  opacity: calc((var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
+  mask-image:
+    conic-gradient(
+      from var(--cursor-angle) at center,
+      black 20%,
+      transparent 34%,
+      transparent 66%,
+      black 80%
+    );
+}
+
+.service-glow-card::after {
+  z-index: 0;
+  background:
+    var(--gradient-one) padding-box,
+    var(--gradient-two) padding-box,
+    var(--gradient-three) padding-box;
+  opacity: calc(var(--fill-opacity) * (var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
+  mask-image:
+    radial-gradient(ellipse at 50% 50%, black 38%, transparent 68%),
+    conic-gradient(from var(--cursor-angle) at center, transparent 8%, black 18%, black 82%, transparent 92%);
+  mask-composite: subtract, add;
+  mix-blend-mode: soft-light;
+}
+
+.service-glow-card > .edge-light {
+  inset: -20px;
+  z-index: 1;
+  mask-image:
+    conic-gradient(
+      from var(--cursor-angle) at center,
+      black 4%,
+      transparent 12%,
+      transparent 88%,
+      black 96%
+    );
+  opacity: calc((var(--edge-proximity) - var(--edge-sensitivity)) / (100 - var(--edge-sensitivity)));
+  mix-blend-mode: plus-lighter;
+}
+
+.service-glow-card > .edge-light::before {
+  content: "";
+  position: absolute;
+  inset: 20px;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--glow-color),
+    inset 0 0 6px 0 var(--glow-color-60),
+    inset 0 0 16px 0 var(--glow-color-40),
+    0 0 6px 0 var(--glow-color-60),
+    0 0 18px 0 var(--glow-color-20);
+}
+
+.service-card-inner {
+  position: relative;
+  z-index: 1;
+}
+
 .info-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
