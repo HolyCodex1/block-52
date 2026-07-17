@@ -1197,8 +1197,6 @@ h1 {
 }
 
 .floating-cta-copy {
-  --spec-angle: 0.72rad;
-  --spec-opacity: 0.48;
   position: relative;
   display: flex;
   align-items: center;
@@ -1221,58 +1219,18 @@ h1 {
     background 0.24s ease;
 }
 
-.floating-cta-copy::before,
-.floating-cta-copy::after {
-  content: "";
+.specular-panel-fx {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
   pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
 }
 
-.floating-cta-copy::before {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background:
-    linear-gradient(
-      118deg,
-      transparent 14%,
-      rgba(255, 255, 255, 0.05) 32%,
-      rgba(255, 255, 255, 0.14) 46%,
-      rgba(255, 255, 255, 0.04) 58%,
-      transparent 74%
-    );
-  background-size: 220% 100%;
-  background-position: 120% 0;
-  transition:
-    background-position 0.95s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.24s ease,
-    opacity 0.24s ease;
-}
-
-.floating-cta-copy::after {
-  opacity: 0.22;
-  background:
-    radial-gradient(
-      140px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(255, 255, 255, 0.26) 0%,
-      rgba(255, 255, 255, 0.1) 24%,
-      rgba(255, 255, 255, 0.03) 44%,
-      transparent 74%
-    ),
-    linear-gradient(
-      var(--spec-angle),
-      transparent 12%,
-      rgba(255, 255, 255, 0.03) 30%,
-      rgba(255, 255, 255, 0.18) 46%,
-      rgba(255, 255, 255, 0.34) 50%,
-      rgba(255, 255, 255, 0.14) 56%,
-      rgba(255, 255, 255, 0.02) 72%,
-      transparent 88%
-    );
-  transform: translateX(-12%) scale(1.02);
-  transition:
-    opacity 0.24s ease,
-    transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+.specular-panel-fx canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .floating-cta-copy span {
@@ -1297,20 +1255,6 @@ h1 {
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 20px 40px rgba(0, 0, 0, 0.24),
     0 0 26px color-mix(in srgb, var(--accent) 10%, transparent);
-}
-
-.floating-cta-copy:hover::before,
-.floating-cta-copy:focus-visible::before,
-.floating-cta-copy.is-specular::before {
-  background-position: -20% 0;
-  border-color: rgba(255, 255, 255, 0.16);
-}
-
-.floating-cta-copy:hover::after,
-.floating-cta-copy:focus-visible::after,
-.floating-cta-copy.is-specular::after {
-  opacity: max(0.76, var(--spec-opacity));
-  transform: translateX(0) scale(1.04);
 }
 
 .floating-cta-actions {
