@@ -1495,20 +1495,22 @@ h1 {
     max-width: none;
     align-items: stretch;
     grid-template-columns: 1fr;
-    gap: 12px;
-    bottom: 14px;
-    padding: 14px;
+    gap: 0;
+    bottom: 12px;
+    padding: 8px;
+    border-radius: 18px;
     transform: none;
   }
 
   .floating-cta-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-left: 0;
+    display: none;
   }
 
   .floating-cta-copy {
     width: 100%;
-    min-height: 56px;
+    min-height: 48px;
+    justify-content: center;
+    border-radius: 14px;
   }
 
   .floating-cta .btn {
@@ -1526,16 +1528,12 @@ h1 {
     left: 10px;
     right: 10px;
     bottom: 10px;
-    padding: 10px;
-  }
-
-  .floating-cta-actions {
-    grid-template-columns: 1fr;
+    padding: 8px;
   }
 
   .floating-cta-copy,
   .floating-cta .btn {
-    min-height: 50px;
+    min-height: 46px;
   }
 }
 

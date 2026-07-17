@@ -517,7 +517,7 @@ const buildSite = (data) => {
         data.floatingCta
           ? `
               <div class="floating-cta reveal is-visible">
-                <a class="floating-cta-copy" href="${escapeHtml(data.floatingCta.primaryHref)}">
+                <a class="floating-cta-copy" href="#contact">
                   <strong>${escapeHtml(data.floatingCta.label)}</strong>
                 </a>
                 <div class="floating-cta-actions">
